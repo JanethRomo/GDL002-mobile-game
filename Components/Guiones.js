@@ -13,7 +13,7 @@ export default class Guiones extends Component {
   }
 
   getGuionesConLetterSpacing(){
-    return this.props.palabraAdivinadaHastaElMomento.split('').join(' ');
+    return this.props.wordToGuessMoment.split('').join(' ');
   }
 
   render() {

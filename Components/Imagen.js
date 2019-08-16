@@ -16,7 +16,7 @@ export default class Imagen extends Component {
   render() {
     return (
       <Image style={styles.imagen}
-             source={IMAGENES[this.props.numFallos.toString()]} />
+             source={IMAGENES[this.props.numMistakes.toString()]} />
     );
   }
 }

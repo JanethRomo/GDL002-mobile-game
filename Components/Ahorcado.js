@@ -15,111 +15,111 @@ export default class Ahorcado extends Component {
   constructor(props){
     super(props);
 
-    this.sePulsoBoton = this.sePulsoBoton.bind(this);
+    this.pushButton = this.pushButton.bind(this);
 
-    let palabra = this.getPalabraAdivinar();
+    let word = this.getWordGuess();
 
     this.state = {
-      numAciertos: 0,
-      numFallos: 0,
-      palabraAAdivinar: palabra,
-      palabraAdivinadaHastaElMomento: this.inicializarPalabraAdivinadaHastaElMomento(palabra),
-      botones: this.getBotones(),
+      rigthNumers: 0,
+      numMistakes: 0,
+      wordToGuess: word,
+      wordToGuessMoment: this.startWordToGuessMoment(word),
+      buttons: this.getButtons(),
       modalVisible: false,
-      resultado: ''
+      result: ''
     }
   }
 
-  reiniciar(){
-    let palabra = this.getPalabraAdivinar();
+  reStart(){
+    let word = this.getWordGuess();
     
     this.setState({
-      numAciertos: 0,
-      numFallos: 0,
-      palabraAAdivinar: palabra,
-      palabraAdivinadaHastaElMomento: this.inicializarPalabraAdivinadaHastaElMomento(palabra),
-      botones: this.getBotones(),
+      rigthNumers: 0,
+      numMistakes: 0,
+      wordToGuess: word,
+      wordToGuessMoment: this.startWordToGuessMoment(word),
+      buttons: this.getButtons(),
       modalVisible: false,
-      resultado: ''
+      result: ''
     });
   }
 
-  getBotones(){
-    let LETRAS = [ "A", "B", "C", "D", "E", "F", "G", 
+  getButtons(){
+    let letters = [ "A", "B", "C", "D", "E", "F", "G", 
                     "H", "I", "J", "K", "L", "M", "N",
                     "Ñ", "O", "P", "Q", "R", "S", "T",
                     "U", "V", "W", "X", "Y", "Z" 
                   ];
 
-    return LETRAS.map((l) => ({ letra: l, estado: 'no-pulsado'}));
+    return letters.map((l) => ({ letter: l, estado: 'no-pulse'}));
   }
 
-  getPalabraAdivinar(){
-    let PALABRAS = ["BOOTCAMP", "LABORATORIA", "SORORIDAD"];
-    return PALABRAS[Math.floor(Math.random() * PALABRAS.length)];
+  getWordGuess(){
+    let words = ["BOOTCAMP", "LABORATORIA", "SORORIDAD"];
+    return words[Math.floor(Math.random() * words.length)];
   }
 
-  inicializarPalabraAdivinadaHastaElMomento(palabra){
-    let palabraInicializada = "";
-    for(let i = 0; i < palabra.length; i++){
-      palabraInicializada += "-";
+  startWordToGuessMoment(word){
+    let wordStarting = "";
+    for(let i = 0; i < word.length; i++){
+      wordStarting += "-";
     }
-    return palabraInicializada;
+    return wordStarting;
   }
 
-  sePulsoBoton(i){
+  pushButton(i){
     
-    let botonesAux = this.state.botones;
-    let letra = botonesAux[i].letra;
+    let buttonsAux = this.state.buttons;
+    let lyric = buttonsAux[i].lyric;
 
-    if(this.hayAcierto(letra)){
-      botonesAux[i].estado = "pulsado-acertado";
+    if(this.isRigth(lyric)){
+      buttonsAux[i].estado = "pulse-rigth";
       this.setState((prevState) => ({
-        botones: botonesAux
+        buttons: buttonsAux
       }));
     } else {
-      botonesAux[i].estado = "pulsado-no-acertado";
+      buttonsAux[i].estado = "pulse-not-rigth";
       this.setState((prevState) => ({
-        botones: botonesAux,
-        numFallos: ++prevState.numFallos
+        buttons: buttonsAux,
+        numMistakes: ++prevState.numMistakes
       }));
     }
   }
 
   componentDidUpdate(){
-    if(this.state.numFallos == 6){
+    if(this.state.numMistakes == 6){
       this.setState({
         modalVisible: true,
-        resultado: '¡Perdiste!',
-        numFallos: 0
+        result: '¡You Lose!',
+        numMistakes: 0
       });
     }
 
-    if(this.state.palabraAAdivinar.length == this.state.numAciertos){
+    if(this.state.wordToGuess.length == this.state.rigthNumers){
       this.setState({
         modalVisible: true,
-        resultado: '¡Ganaste!',
-        numAciertos: 0
+        result: '¡YOU WIN!',
+        rigthNumers: 0
       });
     }
   }
 
-  hayAcierto(letra){
-    let acierto = false;
+  isRigth(lyric){
+    let rigth = false;
 
-    for(let i = 0; i < this.state.palabraAAdivinar.length; i++){
-      if(letra == this.state.palabraAAdivinar.substr(i, 1)){
+    for(let i = 0; i < this.state.wordToGuess.length; i++){
+      if(lyric == this.state.wordToGuess.substr(i, 1)){
         this.setState((prevState) => ({
-          numAciertos: ++prevState.numAciertos,
-          palabraAdivinadaHastaElMomento: prevState.palabraAdivinadaHastaElMomento.substr(0, i) +
-                                          letra +
-                                          prevState.palabraAdivinadaHastaElMomento.substr(i + 1)
+          rigthNumers: ++prevState.rigthNumers,
+          wordToGuessMoment: prevState.wordToGuessMoment.substr(0, i) +
+                                          lyric +
+                                          prevState.wordToGuessMoment.substr(i + 1)
         }));
-        acierto = true;
+        rigth = true;
       }
     }
 
-    return acierto;
+    return rigth;
   }
 
   render() {
@@ -127,14 +127,14 @@ export default class Ahorcado extends Component {
       <View style={styles.container}>
         {this.getModal()}
         <View style={styles.imagen}>
-          <Imagen numFallos={this.state.numFallos}/>
+          <Imagen numMistakes={this.state.numMistakes}/>
         </View >
         <View style={styles.guiones}>
-          <Guiones palabraAdivinadaHastaElMomento={this.state.palabraAdivinadaHastaElMomento}/>
+          <Guiones wordToGuessMoment={this.state.wordToGuessMoment}/>
         </View>
         <View style={styles.botonera}>
-          <Botonera botones={this.state.botones}
-                    sePulsoBoton={this.sePulsoBoton}/>
+          <Botonera buttons={this.state.buttons}
+                    pushButton={this.pushButton}/>
         </View>
       </View>
     );
@@ -145,14 +145,14 @@ export default class Ahorcado extends Component {
       <Modal  animationType="fade"
               transparent={true}
               visible={this.state.modalVisible}
-              onRequestClose={() => {this.reiniciar();}}>
+              onRequestClose={() => {this.reStart();}}>
         <View style={styles.modalContainer}>
           <View style={styles.innerModalContainer}>
-            <Text style={styles.texto}>{this.state.resultado}</Text>
+            <Text style={styles.text}>{this.state.result}</Text>
 
-            <TouchableHighlight onPress={() => { this.reiniciar(); }}
+            <TouchableHighlight onPress={() => { this.reStart(); }}
                                 style={styles.button}>
-              <Text style={styles.textoBoton}>Pulsa aquí para jugar otra vez</Text>
+              <Text style={styles.textButton}>Pulsa aquí para jugar otra vez</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -171,18 +171,18 @@ container: {
 imagen: {
   flex: 5,
   justifyContent: 'center',
-  backgroundColor: 'yellow'
+  backgroundColor: 'white'
 },
 guiones: {
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: 'red'
+  backgroundColor: 'white'
 },
 botonera: {
   flex: 3,
   justifyContent: 'center',
-  backgroundColor: 'yellow'
+  backgroundColor: 'black'
 },
 modalContainer: {
   flex: 1,
@@ -204,12 +204,12 @@ button: {
   backgroundColor: 'blue',
   margin: 20
 },
-texto: {
+text: {
   fontSize: 20,
   fontWeight: 'bold',
   margin: 20
 },
-textoBoton: {
+textButton: {
   fontSize: 20,
   color: 'white'
 }

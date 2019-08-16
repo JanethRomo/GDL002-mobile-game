@@ -8,23 +8,23 @@ import {
 } from 'react-native';
 
 
-export default class Botonera extends Component {
+export default class botonera extends Component {
   constructor(props){
     super(props);
     
   }
 
-  getBotones(){
-    return this.props.botones.map(
-      (boton, index) => 
-        <TouchableHighlight onPress={() => this.props.sePulsoBoton(index)}
+  getButtons(){
+    return this.props.getButtons.map(
+      (button, index) => 
+        <TouchableHighlight onPress={() => this.props.pushButton(index)}
                             key={index}
                             underlayColor="white">
-          <View style={boton.estado == "no-pulsado" ? 
+          <View style={button.state == "no-pulse" ? 
                           styles.botonNoPulsado : (
-                             boton.estado == "pulsado-acertado" ? styles.botonPulsadoAcertado :
-                                                                  styles.botonPulsadoNoAcertado  )}>
-            <Text style={styles.textoBoton}>{boton.letra}</Text>
+                             button.state == "pulse-rigth" ? styles.buttonPulseRigth :
+                                                                  styles.buttonNoPulse  )}>
+            <Text style={styles.textButton}>{button.word}</Text>
           </View>
         </TouchableHighlight>
     );
@@ -33,7 +33,7 @@ export default class Botonera extends Component {
   render() {
     return (
       <View style={styles.botonera}>
-        {this.getBotones()}
+        {this.getButtons()}
       </View>
     );
   }
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'orange'
+    backgroundColor: 'black'
   },
   botonNoPulsado: {
     margin: 10,
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'blue'
+    backgroundColor: 'gray'
   },
-  botonPulsadoAcertado: {
+  buttonPulseRigth: {
     margin: 10,
     width: 30,
     height: 30,
@@ -65,16 +65,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'green'
   },
-  botonPulsadoNoAcertado: {
+  buttonNoPulse: {
     margin: 10,
     width: 30,
     height: 30,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red'
+    backgroundColor: 'white'
   },
-  textoBoton: {
+  textButton: {
     fontSize: 20,
     color: 'white'
   }
